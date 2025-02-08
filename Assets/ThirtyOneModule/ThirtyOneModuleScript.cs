@@ -114,8 +114,8 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions[0] = temp;  
       }
       else if (suit == 1) {
-         string temp = directions[1];
-         directions[1] = directions[3];
+         string temp = directions[2];
+         directions[2] = directions[3];
          directions[3] = temp;
       }
       else if (suit == 2) {
@@ -127,8 +127,8 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       }
       else if (suit == 3) {
          string temp = directions[0];
-         directions[0] = directions[2];
-         directions[2] = temp;
+         directions[0] = directions[1];
+         directions[1] = temp;
       }
       else {
          directions = new List<string> {"Up", "Right", "Down", "Left"};
