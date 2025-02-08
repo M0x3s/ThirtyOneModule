@@ -171,6 +171,10 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       correctScreen.SetActive(true);
       wrongScreen.SetActive(false);
 	  solveManager.handlePass();
+	  if (solveManager.isComplete()) {
+			Module.HandlePass();
+			yield break;
+	  }
       yield return new WaitForSeconds(1f);
       updateDirections(currSuit);
       setup();
@@ -182,6 +186,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       correctScreen.SetActive(false);
       wrongScreen.SetActive(true);
 	  solveManager.handleStrike();
+	  Module.HandleStrike();
       yield return new WaitForSeconds(1f);
       updateDirections(-1);
       setup();
