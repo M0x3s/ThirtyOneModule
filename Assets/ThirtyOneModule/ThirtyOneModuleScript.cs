@@ -20,6 +20,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
    public GameObject cardScreen;
    public SolveManager solveManager;
 
+   public CardRenderer transferCard;
    public CardRenderer newCard;
    public CardRenderer oldCard;
    
@@ -53,7 +54,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       hitButton.OnInteract += delegate () {
          Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, hitButton.transform);
          hitButton.AddInteractionPunch();
-         onHit();
+         StartCoroutine(onHit());
          return false;
          };
       standButton.OnInteract += delegate () {
@@ -66,6 +67,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
    }
 
    void setup() {
+      oldCard.hideCard();
       showCards();
       currentPosition[0] = Rnd.Range(0,map.Count);
       currentPosition[1] = Rnd.Range(0,map[currentPosition[0]].Count);
@@ -74,36 +76,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       currSuit = Rnd.Range(0,4);
 	  isActive = true;
       travelMap();
-      onHit();
-   }
-
-   void onHit() {
-      if (!isActive) {
-         return;
-      }
-      oldCard.updateRank(ranks[currRank - 1]);
-      oldCard.updateSuit(suits[currSuit]);
-      currRank = map[currentPosition[0]][currentPosition[1]];
-      currSuit = Rnd.Range(0,4);
-      total += currRank;
-      if (total > 31) {
-         StartCoroutine(incorrectSection());
-         return;
-      }
-      newCard.updateRank(ranks[currRank - 1]);
-      newCard.updateSuit(suits[currSuit]);
-      travelMap();
-   }
-   void onStand() {
-      if (!isActive) {
-         return;
-      }
-      if (total + map[currentPosition[0]][currentPosition[1]] > 31) {
-         StartCoroutine(finishedSection());
-      }
-      else {
-         StartCoroutine(incorrectSection());
-      }
+      StartCoroutine(onHit());
    }
 
    void travelMap() {
@@ -164,6 +137,59 @@ public class ThirtyOneModuleScript : MonoBehaviour {
 		Debug.Log(i);
 	  }
    }
+   void onStand() {
+      if (!isActive) {
+         return;
+      }
+      if (total + map[currentPosition[0]][currentPosition[1]] > 31) {
+         StartCoroutine(finishedSection());
+      }
+      else {
+         StartCoroutine(incorrectSection());
+      }
+   }
+   IEnumerator onHit() {
+      if (!isActive) {
+         yield break;
+      }
+	  isActive = false;
+     if (total + map[currentPosition[0]][currentPosition[1]] > 31) {
+         StartCoroutine(incorrectSection());
+         yield break;
+      }
+
+     transferCard.gameObject.SetActive(true);
+     newCard.hideCard();
+
+     transferCard.updateRank(ranks[currRank - 1]);
+     transferCard.updateSuit(suits[currSuit]);
+     transferCard.gameObject.transform.localPosition = new Vector3(0.2f, .55f, 0f);
+     
+	  for (var t = 0f; t < 1; t += Time.deltaTime / 0.2f)
+        {
+            transferCard.gameObject.transform.localPosition = Vector3.Lerp(new Vector3(0.2f, .55f, 0f), new Vector3(-0.2f, .55f, 0f), t);
+            yield return null;
+        }
+      
+      oldCard.updateRank(ranks[currRank - 1]);
+      oldCard.updateSuit(suits[currSuit]);
+      oldCard.showCard();
+
+      transferCard.gameObject.SetActive(false);
+
+      yield return new WaitForSeconds(0.05f);
+
+      currRank = map[currentPosition[0]][currentPosition[1]];
+      currSuit = Rnd.Range(0,4);
+      total += currRank;
+      newCard.updateRank(ranks[currRank - 1]);
+      newCard.updateSuit(suits[currSuit]);
+      newCard.showCard();
+
+      travelMap();
+      isActive = true;
+   }
+
    IEnumerator finishedSection() {
       //Reminder to connect to counter
       isActive = false;
