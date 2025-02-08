@@ -1,0 +1,10 @@
+{
+  "name": "thirtyOne-Editor",
+  "references": [
+    "thirtyOne"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
