@@ -8,6 +8,7 @@ using KModkit;
 using Rnd = UnityEngine.Random;
 
 public class ThirtyOneModuleScript : MonoBehaviour {
+	public KMBombModule Module;
    public KMBombInfo Bomb;
    public KMAudio Audio;
    
@@ -61,20 +62,17 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          onStand();
          return false;
          };
-      setup();
+	  Module.OnActivate += delegate() {setup();};
    }
-   void reset() {
-      total = 0;
-      setup();
-   }
+
    void setup() {
       showCards();
-      isActive = true;
       currentPosition[0] = Rnd.Range(0,map.Count);
       currentPosition[1] = Rnd.Range(0,map[currentPosition[0]].Count);
       currRank = map[currentPosition[0]][currentPosition[1]];
       total = currRank;
       currSuit = Rnd.Range(0,4);
+	  isActive = true;
       travelMap();
       onHit();
    }
@@ -134,9 +132,10 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       wrongScreen.SetActive(false);
    }
    void updateDirections(int suit) {
+	Debug.Log(suit);
       if (suit == 0) {
          string temp = directions[3];
-         for (int i = 1; i < directions.Count; i++) {
+         for (int i = directions.Count() - 1; i > 0; i--) {
             directions[i] = directions[i - 1];
          }
          directions[0] = temp;  
@@ -161,6 +160,9 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       else {
          directions = new List<string> {"Up", "Right", "Down", "Left"};
       }
+	  foreach (string i in directions) {
+		Debug.Log(i);
+	  }
    }
    IEnumerator finishedSection() {
       //Reminder to connect to counter
@@ -171,7 +173,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
 	  solveManager.handlePass();
       yield return new WaitForSeconds(1f);
       updateDirections(currSuit);
-      reset();
+      setup();
    }
    IEnumerator incorrectSection() {
       //Reminder to connect to counter
@@ -182,7 +184,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
 	  solveManager.handleStrike();
       yield return new WaitForSeconds(1f);
       updateDirections(-1);
-      reset();
+      setup();
    }
 
 
