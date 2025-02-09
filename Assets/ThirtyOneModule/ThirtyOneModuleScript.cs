@@ -105,7 +105,6 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       wrongScreen.SetActive(false);
    }
    void updateDirections(int suit) {
-	   Debug.Log(suit);
       if (suit == 0) {
          string temp = directions[0];
          for (int i = 1; i < directions.Count; i++) {
@@ -133,8 +132,9 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       else {
          directions = new List<string> {"Up", "Right", "Down", "Left"};
       }
+      Debug.Log("[Thirty One #thirtyOne] New Compass (Read out Spades, Hearts, Clubs, then Diamonds.)");
 	  foreach (string i in directions) {
-         Debug.Log(i);
+         Debug.Log("[Thirty One #thirtyOne] Direction: " + i);
 	  }
    }
    void onStand() {
