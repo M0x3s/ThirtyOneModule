@@ -220,14 +220,34 @@ public class ThirtyOneModuleScript : MonoBehaviour {
 
 
 #pragma warning disable 414
-   private readonly string TwitchHelpMessage = @"Use !{0} to do something.";
+   private readonly string TwitchHelpMessage = @"Use !{0} hit to press the Hit Button. Use !{0} stand to press the Stand Button.";
 #pragma warning restore 414
 
    IEnumerator ProcessTwitchCommand (string Command) {
-      yield return null;
+      Command = Command.Trim().ToLower();
+		yield return null;
+		if (Command == "hit") {
+			hitButton.OnInteract();
+			yield break;
+		}
+      if (Command == "stand") {
+			standButton.OnInteract();
+			yield break;
+		}
+		yield return "sendtochaterror I don't understand!";
    }
 
    IEnumerator TwitchHandleForcedSolve () {
-      yield return null;
-   }
+		while (!ModuleSolved) {
+         if (isActive) {
+			   if (total + map[currentPosition[0]][currentPosition[1]] > 31) {
+               onStand();
+            }
+            else {
+               StartCoroutine(onHit());
+            }
+         }
+         yield return new WaitForSeconds(0.1f);
+		}
+	}
 }

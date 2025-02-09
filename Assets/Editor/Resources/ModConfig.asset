@@ -14,7 +14,9 @@ MonoBehaviour:
   id: thirtyOne
   title: Thirty One
   author: M0xes
-  description: Totally not Blackjack, but 31 instead of 21.
+  description: "Totally not Blackjack, but 31 instead of 21.\n\nManual made by M0xes.\r\n\r\nManual
+    can be found on ktane.timwi.de or in the manuals folder of your game.\r\n\r\nIf
+    any bugs arise, dm m0x3s on discord."
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 5ecfc1a88f30db241a0c10a2b7519a6b, type: 3}
