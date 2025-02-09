@@ -73,7 +73,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       currentPosition[1] = Rnd.Range(0,map[currentPosition[0]].Count);
       currRank = map[currentPosition[0]][currentPosition[1]];
       total = currRank;
-      currSuit = Rnd.Range(0,4);
+      currSuit = Rnd.Range(0,4);;
 	  isActive = true;
       travelMap();
       StartCoroutine(onHit());
@@ -105,13 +105,13 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       wrongScreen.SetActive(false);
    }
    void updateDirections(int suit) {
-	Debug.Log(suit);
+	   Debug.Log(suit);
       if (suit == 0) {
-         string temp = directions[3];
-         for (int i = directions.Count() - 1; i > 0; i--) {
-            directions[i] = directions[i - 1];
+         string temp = directions[0];
+         for (int i = 1; i < directions.Count; i++) {
+            directions[i - 1] = directions[i];
          }
-         directions[0] = temp;  
+         directions[3] = temp;
       }
       else if (suit == 1) {
          string temp = directions[2];
@@ -119,11 +119,11 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions[3] = temp;
       }
       else if (suit == 2) {
-         string temp = directions[0];
-         for (int i = 1; i < directions.Count; i++) {
-            directions[i - 1] = directions[i];
+         string temp = directions[3];
+         for (int i = directions.Count() - 1; i > 0; i--) {
+            directions[i] = directions[i - 1];
          }
-         directions[3] = temp;
+         directions[0] = temp;
       }
       else if (suit == 3) {
          string temp = directions[0];
@@ -134,7 +134,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions = new List<string> {"Up", "Right", "Down", "Left"};
       }
 	  foreach (string i in directions) {
-		Debug.Log(i);
+         Debug.Log(i);
 	  }
    }
    void onStand() {
