@@ -113,9 +113,19 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions[3] = temp;
       }
       else if (suit == 1) {
-         string temp = directions[2];
-         directions[2] = directions[3];
-         directions[3] = temp;
+         int up = -1;
+         int right = -1;
+         for (int i = 0; i < directions.Count; i++) {
+            if (directions[i] == "Up") {
+               up = i;
+            }
+            else if (directions[i] == "Right") {
+               right = i;
+            }
+         }
+         string temp = directions[up];
+         directions[up] = directions[right];
+         directions[right] = temp;
       }
       else if (suit == 2) {
          string temp = directions[3];
@@ -125,9 +135,19 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions[0] = temp;
       }
       else if (suit == 3) {
-         string temp = directions[0];
-         directions[0] = directions[1];
-         directions[1] = temp;
+         int left = -1;
+         int down = -1;
+         for (int i = 0; i < directions.Count; i++) {
+            if (directions[i] == "Left") {
+               left = i;
+            }
+            else if (directions[i] == "Down") {
+               down = i;
+            }
+         }
+         string temp = directions[left];
+         directions[left] = directions[down];
+         directions[down] = temp;
       }
       else {
          directions = new List<string> {"Up", "Right", "Down", "Left"};
