@@ -73,7 +73,9 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       currentPosition[1] = Rnd.Range(0,map[currentPosition[0]].Count);
       currRank = map[currentPosition[0]][currentPosition[1]];
       total = currRank;
-      currSuit = Rnd.Range(0,4);;
+      currSuit = Rnd.Range(0,4);
+      Debug.Log("[Thirty One #thirtyOne] First Card's Rank (A=1, J=11, Q=12, K=13): " + currRank);
+      Debug.Log("[Thirty One #thirtyOne] First Card's Suit (Spade=0, Heart=1, Club=2, Diamond=3): " + currSuit);
 	  isActive = true;
       travelMap();
       StartCoroutine(onHit());
@@ -81,6 +83,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
 
    void travelMap() {
       string direction = directions[currSuit];
+      Debug.Log("[Thirty One #thirtyOne] Moving " + direction);
       if (direction == "Up") {
          //The + map.Count is to handle negatives
          currentPosition[0] = (currentPosition[0] - 1 + map.Count) % map.Count;
@@ -97,6 +100,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       else {
          Debug.Log("Uh oh");
       }
+      Debug.Log("[Thirty One #thirtyOne] New Position (x,y): (" + currentPosition[1] + "," + currentPosition[0] + ")");
    }
 
    void showCards() {
@@ -105,7 +109,12 @@ public class ThirtyOneModuleScript : MonoBehaviour {
       wrongScreen.SetActive(false);
    }
    void updateDirections(int suit) {
+      if (suit != -1) {
+         Debug.Log("[Thirty One #thirtyOne] Updating Directions based on Suit (Spade=0, Heart=1, Club=2, Diamond=3): " + suit);
+      }
+       
       if (suit == 0) {
+         Debug.Log("[Thirty One #thirtyOne] Rotating the rose clockwise");
          string temp = directions[0];
          for (int i = 1; i < directions.Count; i++) {
             directions[i - 1] = directions[i];
@@ -113,28 +122,7 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions[3] = temp;
       }
       else if (suit == 1) {
-         int up = -1;
-         int right = -1;
-         for (int i = 0; i < directions.Count; i++) {
-            if (directions[i] == "Up") {
-               up = i;
-            }
-            else if (directions[i] == "Right") {
-               right = i;
-            }
-         }
-         string temp = directions[up];
-         directions[up] = directions[right];
-         directions[right] = temp;
-      }
-      else if (suit == 2) {
-         string temp = directions[3];
-         for (int i = directions.Count() - 1; i > 0; i--) {
-            directions[i] = directions[i - 1];
-         }
-         directions[0] = temp;
-      }
-      else if (suit == 3) {
+         Debug.Log("[Thirty One #thirtyOne] Swapping rose suits going left and down.");
          int left = -1;
          int down = -1;
          for (int i = 0; i < directions.Count; i++) {
@@ -149,10 +137,35 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          directions[left] = directions[down];
          directions[down] = temp;
       }
+      else if (suit == 2) {
+         Debug.Log("[Thirty One #thirtyOne] Rotating rose counterclockwise.");
+         string temp = directions[3];
+         for (int i = directions.Count() - 1; i > 0; i--) {
+            directions[i] = directions[i - 1];
+         }
+         directions[0] = temp;
+      }
+      else if (suit == 3) {
+         Debug.Log("[Thirty One #thirtyOne] Swapping rose suits going up and right.");
+         int up = -1;
+         int right = -1;
+         for (int i = 0; i < directions.Count; i++) {
+            if (directions[i] == "Up") {
+               up = i;
+            }
+            else if (directions[i] == "Right") {
+               right = i;
+            }
+         }
+         string temp = directions[up];
+         directions[up] = directions[right];
+         directions[right] = temp;
+      }
       else {
+         Debug.Log("[Thirty One #thirtyOne] Reseting the compass.");
          directions = new List<string> {"Up", "Right", "Down", "Left"};
       }
-      Debug.Log("[Thirty One #thirtyOne] New Compass (Read out Spades, Hearts, Clubs, then Diamonds.)");
+      Debug.Log("[Thirty One #thirtyOne] Current Compass (Read out Spades, Hearts, Clubs, then Diamonds.)");
 	  foreach (string i in directions) {
          Debug.Log("[Thirty One #thirtyOne] Direction: " + i);
 	  }
@@ -162,9 +175,11 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          return;
       }
       if (total + map[currentPosition[0]][currentPosition[1]] > 31) {
+         Debug.Log("[Thirty One #thirtyOne] Correct! As " + total + " + " + map[currentPosition[0]][currentPosition[1]] + " is more than 31.");
          StartCoroutine(finishedSection());
       }
       else {
+          Debug.Log("[Thirty One #thirtyOne] Incorrect! As " + total + " + " + map[currentPosition[0]][currentPosition[1]] + " is less than or equal to 31.");
          StartCoroutine(incorrectSection());
       }
    }
@@ -173,7 +188,10 @@ public class ThirtyOneModuleScript : MonoBehaviour {
          yield break;
       }
 	  isActive = false;
-     if (total + map[currentPosition[0]][currentPosition[1]] > 31) {
+     Debug.Log("[Thirty One #thirtyOne] New Card's Rank (A=1, J=11, Q=12, K=13): " + map[currentPosition[0]][currentPosition[1]]);
+     total += map[currentPosition[0]][currentPosition[1]];
+     if (total > 31) {
+         Debug.Log("[Thirty One #thirtyOne] Goes over 31! (Total: " + total + ")");
          StartCoroutine(incorrectSection());
          yield break;
       }
@@ -201,12 +219,14 @@ public class ThirtyOneModuleScript : MonoBehaviour {
 
       currRank = map[currentPosition[0]][currentPosition[1]];
       currSuit = Rnd.Range(0,4);
-      total += currRank;
+      Debug.Log("[Thirty One #thirtyOne] New Card's Suit (Spade=0, Heart=1, Club=2, Diamond=3): " + currSuit);
       newCard.updateRank(ranks[currRank - 1]);
       newCard.updateSuit(suits[currSuit]);
       newCard.showCard();
+      Debug.Log("[Thirty One #thirtyOne] Current total: " + total);
 
       travelMap();
+      Debug.Log("[Thirty One #thirtyOne] Next Rank Will Be: " + map[currentPosition[0]][currentPosition[1]]);
       isActive = true;
    }
 
