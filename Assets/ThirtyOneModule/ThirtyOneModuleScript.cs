@@ -115,51 +115,67 @@ public class ThirtyOneModuleScript : MonoBehaviour {
        
       if (suit == 0) {
          Debug.Log("[Thirty One #"+ModuleId+"] Rotating the rose clockwise");
-         string temp = directions[0];
-         for (int i = 1; i < directions.Count; i++) {
-            directions[i - 1] = directions[i];
+         for (int i = 0; i < directions.Count; i++) {
+             string direction = directions[i];
+            if (direction == "Up") {
+               directions[i] = "Right";
+            }
+            else if (direction == "Down") {
+               directions[i] = "Left";
+            }
+            else if (direction == "Left") {
+               directions[i] = "Up";
+            }
+            else if (direction == "Right") {
+               directions[i] = "Down";
+            }
+            else {
+               Debug.Log("Uh oh");
+            }
          }
-         directions[3] = temp;
       }
       else if (suit == 1) {
          Debug.Log("[Thirty One #"+ModuleId+"] Swapping rose suits going left and down.");
-         int left = -1;
-         int down = -1;
          for (int i = 0; i < directions.Count; i++) {
             if (directions[i] == "Left") {
-               left = i;
+                directions[i] = "Down";
             }
             else if (directions[i] == "Down") {
-               down = i;
+                directions[i] = "Left";
             }
          }
-         string temp = directions[left];
-         directions[left] = directions[down];
-         directions[down] = temp;
       }
       else if (suit == 2) {
          Debug.Log("[Thirty One #"+ModuleId+"] Rotating rose counterclockwise.");
-         string temp = directions[3];
-         for (int i = directions.Count() - 1; i > 0; i--) {
-            directions[i] = directions[i - 1];
+         for (int i = 0; i < directions.Count; i++) {
+             string direction = directions[i];
+            if (direction == "Up") {
+               directions[i] = "Left";
+            }
+            else if (direction == "Down") {
+               directions[i] = "Right";
+            }
+            else if (direction == "Left") {
+               directions[i] = "Down";
+            }
+            else if (direction == "Right") {
+               directions[i] = "Up";
+            }
+            else {
+               Debug.Log("Uh oh");
+            }
          }
-         directions[0] = temp;
       }
       else if (suit == 3) {
          Debug.Log("[Thirty One #"+ModuleId+"] Swapping rose suits going up and right.");
-         int up = -1;
-         int right = -1;
          for (int i = 0; i < directions.Count; i++) {
             if (directions[i] == "Up") {
-               up = i;
+                directions[i] = "Right";
             }
             else if (directions[i] == "Right") {
-               right = i;
+                directions[i] = "Up";
             }
          }
-         string temp = directions[up];
-         directions[up] = directions[right];
-         directions[right] = temp;
       }
       else {
          Debug.Log("[Thirty One #"+ModuleId+"] Reseting the compass.");
